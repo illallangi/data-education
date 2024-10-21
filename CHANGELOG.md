@@ -1,3 +1,9 @@
+## v0.1.3 (2024-10-21)
+
+### Fix
+
+- **migrations**: added initial migration
+
 ## v0.1.2 (2024-10-21)
 
 ### Fix
