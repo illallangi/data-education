@@ -30,7 +30,7 @@ class EducationAdapter(diffsync.Adapter):
                     finish=obj.finish,
                     institution=obj.institution,
                     locality=obj.locality,
-                    olc=obj.olc,
+                    open_location_code=obj.open_location_code,
                     postal_code=obj.postal_code,
                     region=obj.region,
                     start=obj.start,

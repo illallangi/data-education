@@ -1,9 +1,7 @@
-from illallangi.data.education.views.course import (
-    course_html,
-    courses_html,
-)
+from illallangi.data.education.views.course_detail import course_detail
+from illallangi.data.education.views.course_list import course_list
 
 __all__ = [
-    "course_html",
-    "courses_html",
+    "course_detail",
+    "course_list",
 ]

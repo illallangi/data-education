@@ -1,7 +1,7 @@
 from django.apps import AppConfig
 from django.conf import settings
-from django.db.models.signals import post_migrate
 
+from illallangi.django.data.signals import ready_for_models
 from illallangi.rdf.adapters import EducationAdapter as RDFAdapter
 
 
@@ -10,16 +10,16 @@ def add_model(
 ) -> None:
     from illallangi.django.data.models import Model, Synchronize
 
-    Model.objects.update_or_create(
+    Model.objects.create(
         description="Each lesson unlocks new doors to knowledge, empowering you to shape your future.",
         icon="education/courses.jpg",
         model="illallangi.data.education.models.Course",
         plural="Courses",
         singular="Course",
-        url="courses_html",
+        url="course_list",
     )
 
-    Synchronize.objects.update_or_create(
+    Synchronize.objects.create(
         callable="illallangi.data.education.apps.synchronize",
     )
 
@@ -31,9 +31,8 @@ class EducationalHistoryConfig(AppConfig):
     def ready(
         self,
     ) -> None:
-        post_migrate.connect(
+        ready_for_models.connect(
             add_model,
-            sender=self,
         )
 
 

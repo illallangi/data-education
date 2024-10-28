@@ -6,7 +6,23 @@ from illallangi.data.education.models.course import (
 )
 
 
-class Course(diffsync.DiffSyncModel):
+class Course(
+    diffsync.DiffSyncModel,
+):
+    _modelname = "Course"
+    _identifiers = ("label",)
+    _attributes = (
+        "country",
+        "finish",
+        "institution",
+        "locality",
+        "open_location_code",
+        "postal_code",
+        "region",
+        "start",
+        "street",
+    )
+
     pk: int
 
     label: str
@@ -15,25 +31,11 @@ class Course(diffsync.DiffSyncModel):
     finish: PartialDate | None
     institution: str
     locality: str
-    olc: str
+    open_location_code: str
     postal_code: str
     region: str
     start: PartialDate | None
     street: str
-
-    _modelname = "Course"
-    _identifiers = ("label",)
-    _attributes = (
-        "country",
-        "finish",
-        "institution",
-        "locality",
-        "olc",
-        "postal_code",
-        "region",
-        "start",
-        "street",
-    )
 
     @classmethod
     def create(
@@ -49,7 +51,7 @@ class Course(diffsync.DiffSyncModel):
                 "finish": attrs["finish"],
                 "institution": attrs["institution"],
                 "locality": attrs["locality"],
-                "olc": attrs["olc"],
+                "open_location_code": attrs["open_location_code"],
                 "postal_code": attrs["postal_code"],
                 "region": attrs["region"],
                 "start": attrs["start"],

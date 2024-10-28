@@ -8,20 +8,35 @@ from illallangi.data.education.models import Course
 
 
 @require_GET
-def courses_html(
+def course_list(
     request: HttpRequest,
-    **_: dict,
 ) -> render:
     objects = Course.objects.all()
+    breadcrumbs = []
+
+    if not False:
+        breadcrumbs.append(
+            {
+                "title": "Courses",
+                "url": reverse(
+                    "course_list",
+                ),
+            },
+        )
 
     if objects.count() == 1:
         return redirect(
-            objects.first().get_absolute_url(),
+            reverse(
+                "course_detail",
+                kwargs={
+                    "slug": objects.first().slug,
+                },
+            ),
         )
 
     return render(
         request,
-        "education/courses.html",
+        "education/course_list.html",
         {
             "base_template": ("partial.html" if request.htmx else "base.html"),
             "page": Paginator(
@@ -33,22 +48,13 @@ def courses_html(
             ).get_page(
                 request.GET.get("page", 1),
             ),
-            "breadcrumbs": [
-                {
-                    "title": "Courses",
-                    "url": reverse(
-                        "courses_html",
-                    ),
-                },
-            ],
+            "breadcrumbs": breadcrumbs,
             "links": [
                 {
                     "rel": "alternate",
                     "type": "text/html",
                     "href": request.build_absolute_uri(
-                        reverse(
-                            "courses_html",
-                        ),
+                        request.get_full_path(),
                     ),
                 },
             ],

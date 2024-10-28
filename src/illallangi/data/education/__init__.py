@@ -18,12 +18,12 @@ def urlpatterns() -> list[URLPattern]:
     return [
         re_path(
             r"^courses/$",
-            views.courses_html,
-            name="courses_html",
+            views.course_list,
+            name="course_list",
         ),
         re_path(
-            r"^courses/(?P<course_slug>[\w\d-]+)/$",
-            views.course_html,
-            name="course_html",
+            r"^courses/(?P<slug>[\w\d-]+)/$",
+            views.course_detail,
+            name="course_detail",
         ),
     ]

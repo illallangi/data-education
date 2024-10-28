@@ -1,9 +1,10 @@
 {% extends "base.html" %}
+{% load static %}
 {% block content %}
     <h2>{{ obj }}</h2>
-    {% if obj.label %}
+    {% if obj.description %}
         <p>
-            <em>a course at {{ obj.institution }}</em>
+            <em>{{ obj.description }}</em>
         </p>
     {% endif %}
     <table class="table table-hover table-sm">
@@ -88,16 +89,22 @@
                     {% endif %}
                 </td>
             </tr>
-            <tr {% if obj.get_olc_url %}role="button" data-href="{{ obj.get_olc_url }}"{% endif %}>
-                <th scope="row">OLC</th>
+            <tr {% if obj.open_location_code %}role="button" data-href="https://plus.codes/{{ obj.open_location_code }}"{% endif %}>
+                <th scope="row">Open Location Code</th>
                 <td>
-                    {% if obj.olc %}
-                        {{ obj.olc }}
+                    {% if obj.open_location_code %}
+                        {{ obj.open_location_code }}
                     {% else %}
                         <em>Unknown</em>
                     {% endif %}
                 </td>
             </tr>
+            {% for related in related_objects %}
+                <tr role="button" data-href="{{ related.href }}">
+                    <th scope="row">{{ related.title }}</th>
+                    <td>{{ related.count }}</td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
 {% endblock content %}

@@ -1,3 +1,4 @@
+from django.db import models
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
@@ -7,24 +8,25 @@ from illallangi.data.education.models import Course
 
 
 @require_GET
-def course_html(
+def course_detail(
     request: HttpRequest,
-    course_slug: str,
-    **_: dict,
+    slug: str,
 ) -> render:
-    objects = Course.objects.filter(slug=course_slug)
+    objects = Course.objects.filter(
+        slug=slug,
+    )
 
     if objects.count() > 1:
         return HttpResponse(
             status=500,
-            content="Multiple courses found for slug",
+            content="Multiple courses found",
         )
 
     if objects.count() == 1:
         obj = objects.first()
         return render(
             request,
-            "education/course.html",
+            "education/course_detail.html",
             {
                 "base_template": ("partial.html" if request.htmx else "base.html"),
                 "obj": obj,
@@ -32,12 +34,12 @@ def course_html(
                     {
                         "title": "Courses",
                         "url": reverse(
-                            "courses_html",
+                            "course_list",
                         ),
                     },
                     {
                         "title": str(obj),
-                        "url": obj.get_absolute_url(),
+                        "url": request.get_full_path(),
                     },
                 ],
                 "links": [
@@ -45,10 +47,25 @@ def course_html(
                         "rel": "alternate",
                         "type": "text/html",
                         "href": request.build_absolute_uri(
-                            obj.get_absolute_url(),
+                            request.get_full_path(),
                         ),
                     },
                 ],
+                "related_objects": {
+                    related_object.related_model._meta.verbose_name.title(): {  # noqa: SLF001
+                        "href": reverse(
+                            f"{related_object.related_model._meta.verbose_name.lower()}_list",  # noqa: SLF001
+                            kwargs={
+                                "alliance__slug": slug,
+                            },
+                        ),
+                        "title": related_object.related_model._meta.verbose_name_plural.title(),  # noqa: SLF001
+                        "count": related_object.related_model.objects.filter(
+                            models.Q(alliance=obj)
+                        ).count(),
+                    }
+                    for related_object in obj._meta.related_objects  # noqa: SLF001
+                }.values(),
             },
         )
 

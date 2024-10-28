@@ -1,7 +1,5 @@
 from autoslug import AutoSlugField
 from django.db import models
-from django.urls import reverse
-from django_sqids import SqidsField
 from partial_date import PartialDateField
 
 
@@ -19,24 +17,21 @@ class Course(
         unique=True,
     )
 
-    sqid = SqidsField(
-        real_field_name="id",
-        min_length=6,
-    )
-
     # Natural Keys
 
     label = models.CharField(
+        blank=False,
         max_length=63,
         null=False,
-        blank=False,
         unique=True,
     )
 
     # Fields
 
     country = models.CharField(
+        blank=False,
         max_length=63,
+        null=False,
     )
 
     finish = PartialDateField(
@@ -45,23 +40,33 @@ class Course(
     )
 
     institution = models.CharField(
+        blank=False,
         max_length=63,
+        null=False,
     )
 
     locality = models.CharField(
+        blank=False,
         max_length=63,
+        null=False,
     )
 
-    olc = models.CharField(
+    open_location_code = models.CharField(
+        blank=False,
         max_length=11,
+        null=False,
     )
 
     postal_code = models.CharField(
-        max_length=63,
+        blank=False,
+        max_length=4,
+        null=False,
     )
 
     region = models.CharField(
+        blank=False,
         max_length=63,
+        null=False,
     )
 
     start = PartialDateField(
@@ -70,7 +75,9 @@ class Course(
     )
 
     street = models.CharField(
+        blank=False,
         max_length=63,
+        null=False,
     )
 
     # Methods
@@ -79,23 +86,6 @@ class Course(
         self,
     ) -> str:
         return self.label
-
-    def get_absolute_url(
-        self,
-    ) -> str:
-        return reverse(
-            "course_html",
-            kwargs={
-                "course_slug": self.slug,
-            },
-        )
-
-    def get_olc_url(
-        self,
-    ) -> str:
-        if not self.olc:
-            return None
-        return f"https://plus.codes/{self.olc}"
 
     def get_slug(
         self,
