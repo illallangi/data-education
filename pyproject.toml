@@ -22,7 +22,7 @@ keywords = [
     "data",
     "data-lake",
 ]
-version = "0.2.0"
+version = "0.3.0"
 classifiers =[
   "Development Status :: 3 - Alpha",
   "Intended Audience :: Developers",
